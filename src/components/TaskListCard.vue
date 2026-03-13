@@ -22,7 +22,12 @@
             <p class="task-meta">{{ task.meta }}</p>
           </div>
         </div>
-        <span class="tag" :class="task.tagStyle">{{ task.tag }}</span>
+        <div class="task-actions">
+          <span class="tag" :class="task.tagStyle">{{ task.tag }}</span>
+          <button class="icon-btn" type="button" @click="emit('delete-task', task.id)">
+            删除
+          </button>
+        </div>
       </li>
     </ul>
 
@@ -36,6 +41,7 @@
 <script setup>
 import { computed } from 'vue'
 
+const emit = defineEmits(['delete-task'])
 const props = defineProps({
   tasks: {
     type: Array,

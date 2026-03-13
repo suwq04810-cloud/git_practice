@@ -244,6 +244,12 @@ body {
   gap: 12px;
 }
 
+.task-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .check {
   width: 18px;
   height: 18px;
@@ -293,6 +299,16 @@ body {
 .tag.alert {
   background: #b43f2a;
   color: #fef4ee;
+}
+
+.icon-btn {
+  background: transparent;
+  border: 1px solid rgba(31, 27, 22, 0.2);
+  color: #1f1b16;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 .empty-state {

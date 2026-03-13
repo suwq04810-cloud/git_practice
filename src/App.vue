@@ -3,7 +3,7 @@
     <HeroHeader />
     <main class="board">
       <TaskInputCard @add-task="handleAddTask" />
-      <TaskListCard :tasks="tasks" />
+      <TaskListCard :tasks="tasks" @delete-task="handleDeleteTask" />
       <NotesCard />
     </main>
     <PageFooter />
@@ -76,5 +76,9 @@ const handleAddTask = ({ title, due }) => {
     tag: '新任务',
     tagStyle: 'neutral',
   })
+}
+
+const handleDeleteTask = (id) => {
+  tasks.value = tasks.value.filter((task) => task.id !== id)
 }
 </script>
