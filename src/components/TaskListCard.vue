@@ -18,8 +18,8 @@
         <div class="task-left">
           <span class="check" :class="{ empty: task.status !== 'done' }"></span>
           <div>
-            <p class="task-title">{{ task.title }}</p>
-            <p class="task-meta">{{ task.meta }}</p>
+            <p class="task-title" :title="task.title">{{ task.title }}</p>
+            <p class="task-meta" :title="task.meta">{{ task.meta }}</p>
           </div>
         </div>
         <span class="tag" :class="task.tagStyle">{{ task.tag }}</span>
