@@ -24,9 +24,22 @@
         </div>
         <div class="task-actions">
           <span class="tag" :class="task.tagStyle">{{ task.tag }}</span>
-          <button class="icon-btn" type="button" @click="emit('delete-task', task.id)">
-            删除
-          </button>
+          <div class="delete-wrap">
+            <button class="icon-btn" type="button" @click="toggleConfirm(task.id)">
+              删除
+            </button>
+            <div v-if="pendingDeleteId === task.id" class="confirm-pop">
+              <span class="confirm-text">确认删除该任务？</span>
+              <div class="confirm-actions">
+                <button class="confirm-btn danger" type="button" @click="confirmDelete(task.id)">
+                  确认
+                </button>
+                <button class="confirm-btn" type="button" @click="cancelDelete">
+                  取消
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </li>
     </ul>
@@ -39,7 +52,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const emit = defineEmits(['delete-task'])
 const props = defineProps({
@@ -48,6 +61,21 @@ const props = defineProps({
     default: () => [],
   },
 })
+
+const pendingDeleteId = ref(null)
+
+const toggleConfirm = (id) => {
+  pendingDeleteId.value = pendingDeleteId.value === id ? null : id
+}
+
+const confirmDelete = (id) => {
+  emit('delete-task', id)
+  pendingDeleteId.value = null
+}
+
+const cancelDelete = () => {
+  pendingDeleteId.value = null
+}
 
 const doneCount = computed(
   () => props.tasks.filter((task) => task.status === 'done').length,
