@@ -2,20 +2,31 @@
   <section class="panel">
     <div class="panel-header">
       <h2 class="panel-title">添加任务</h2>
-      <span class="panel-note">仅静态预览</span>
+      <span class="panel-note">可提交新任务</span>
     </div>
 
-    <div class="task-input">
+    <form class="task-input" @submit.prevent="submitTask">
       <div class="input-field">
-        <label class="input-label">任务名称</label>
-        <div class="input-box" aria-hidden="true">设计新手引导流程</div>
+        <label class="input-label" for="task-title">任务名称</label>
+        <input
+          id="task-title"
+          v-model="title"
+          class="input-box"
+          type="text"
+          placeholder="例如：设计新手引导流程"
+        />
       </div>
       <div class="input-field">
-        <label class="input-label">截止</label>
-        <div class="input-box small" aria-hidden="true">3 月 18 日</div>
+        <label class="input-label" for="task-due">截止</label>
+        <input
+          id="task-due"
+          v-model="due"
+          class="input-box small"
+          type="date"
+        />
       </div>
-      <button class="primary-btn" type="button">添加任务</button>
-    </div>
+      <button class="primary-btn" type="submit">添加任务</button>
+    </form>
 
     <div class="filters">
       <span class="filter active">全部</span>
@@ -25,3 +36,23 @@
     </div>
   </section>
 </template>
+
+<script setup>
+import { ref } from 'vue'
+
+const emit = defineEmits(['add-task'])
+const title = ref('')
+const due = ref('')
+
+const submitTask = () => {
+  emit('add-task', { title: title.value, due: formatDate(due.value) })
+  title.value = ''
+  due.value = ''
+}
+
+const formatDate = (value) => {
+  if (!value) return ''
+  const [year, month, day] = value.split('-')
+  return `${Number(month)} 月 ${Number(day)} 日`
+}
+</script>

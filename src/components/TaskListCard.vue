@@ -3,66 +3,55 @@
     <div class="panel-header">
       <h2 class="panel-title">今日任务</h2>
       <div class="progress">
-        <div class="progress-bar"></div>
-        <span class="progress-text">已完成 3 / 8</span>
+        <div class="progress-bar" :style="progressStyle"></div>
+        <span class="progress-text">已完成 {{ doneCount }} / {{ totalCount }}</span>
       </div>
     </div>
 
-    <ul class="task-list">
-      <li class="task-item done">
+    <ul v-if="tasks.length" class="task-list">
+      <li
+        v-for="task in tasks"
+        :key="task.id"
+        class="task-item"
+        :class="task.status"
+      >
         <div class="task-left">
-          <span class="check"></span>
+          <span class="check" :class="{ empty: task.status !== 'done' }"></span>
           <div>
-            <p class="task-title">评审线框图</p>
-            <p class="task-meta">设计 · 09:30</p>
+            <p class="task-title">{{ task.title }}</p>
+            <p class="task-meta">{{ task.meta }}</p>
           </div>
         </div>
-        <span class="tag calm">完成</span>
-      </li>
-
-      <li class="task-item">
-        <div class="task-left">
-          <span class="check empty"></span>
-          <div>
-            <p class="task-title">制作主视觉动效原型</p>
-            <p class="task-meta">动效 · 11:00</p>
-          </div>
-        </div>
-        <span class="tag focus">高优先</span>
-      </li>
-
-      <li class="task-item">
-        <div class="task-left">
-          <span class="check empty"></span>
-          <div>
-            <p class="task-title">撰写空状态文案</p>
-            <p class="task-meta">内容 · 14:00</p>
-          </div>
-        </div>
-        <span class="tag neutral">中优先</span>
-      </li>
-
-      <li class="task-item blocked">
-        <div class="task-left">
-          <span class="check empty"></span>
-          <div>
-            <p class="task-title">与后端团队对齐</p>
-            <p class="task-meta">协作 · 等待中</p>
-          </div>
-        </div>
-        <span class="tag alert">受阻</span>
-      </li>
-
-      <li class="task-item">
-        <div class="task-left">
-          <span class="check empty"></span>
-          <div>
-            <p class="task-title">打磨设置图标</p>
-            <p class="task-meta">界面 · 16:30</p>
-          </div>
-        </div>
-        <span class="tag neutral">低优先</span>
+        <span class="tag" :class="task.tagStyle">{{ task.tag }}</span>
       </li>
     </ul>
+
+    <div v-else class="empty-state">
+      <p class="empty-title">暂时没有任务</p>
+      <p class="empty-subtitle">添加第一条任务开始吧。</p>
+    </div>
   </section>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+
+const props = defineProps({
+  tasks: {
+    type: Array,
+    default: () => [],
+  },
+})
+
+const doneCount = computed(
+  () => props.tasks.filter((task) => task.status === 'done').length,
+)
+const totalCount = computed(() => props.tasks.length)
+const progressStyle = computed(() => {
+  const percent = totalCount.value === 0 ? 0 : (doneCount.value / totalCount.value) * 100
+  const clamped = Math.min(100, Math.max(0, percent))
+  return {
+    background: `linear-gradient(90deg, #1f1b16 0 ${clamped}%, #f1e6da ${clamped}% 100%)`,
+  }
+})
+</script>

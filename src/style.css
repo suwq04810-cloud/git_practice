@@ -148,10 +148,16 @@ body {
   border-radius: 12px;
   font-size: 14px;
   color: rgba(31, 27, 22, 0.7);
+  border: none;
+  outline: none;
 }
 
 .input-box.small {
   text-align: center;
+}
+
+.input-box::placeholder {
+  color: rgba(31, 27, 22, 0.45);
 }
 
 .primary-btn {
@@ -287,6 +293,24 @@ body {
 .tag.alert {
   background: #b43f2a;
   color: #fef4ee;
+}
+
+.empty-state {
+  padding: 18px;
+  border-radius: 16px;
+  background: #f1e6da;
+  text-align: center;
+}
+
+.empty-title {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+
+.empty-subtitle {
+  margin: 0;
+  font-size: 13px;
+  opacity: 0.7;
 }
 
 .notes {
