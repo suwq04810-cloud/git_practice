@@ -4,7 +4,7 @@
     <main class="board">
       <TodoInput @add-todo="handleAddTask" />
       <TodoList
-        :todos="tasks"
+        v-model:todos="tasks"
         @delete-todo="handleDeleteTask"
         @toggle-status="handleToggleStatus"
         @update-title="handleUpdateTitle"
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import HeroHeader from './components/HeroHeader.vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
@@ -63,6 +63,30 @@ const tasks = ref([
 ])
 
 const nextId = ref(6)
+const STORAGE_KEY = 'todo-list-items'
+
+onMounted(() => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    if (!saved) return
+    const parsed = JSON.parse(saved)
+    if (Array.isArray(parsed)) {
+      tasks.value = parsed
+      const maxId = parsed.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0)
+      nextId.value = Math.max(nextId.value, maxId + 1)
+    }
+  } catch (error) {
+    console.warn('Failed to load tasks from storage', error)
+  }
+})
+
+watch(
+  tasks,
+  (value) => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(value))
+  },
+  { deep: true },
+)
 
 const handleAddTask = ({ title, due }) => {
   const trimmedTitle = title.trim()

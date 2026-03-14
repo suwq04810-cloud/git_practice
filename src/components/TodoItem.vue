@@ -1,6 +1,7 @@
 ﻿<template>
   <li class="task-item" :class="todo.status">
     <div class="task-left">
+      <span class="drag-handle" aria-hidden="true"></span>
       <button
         class="check"
         :class="{ checked: todo.status === 'done' }"
