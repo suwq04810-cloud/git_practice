@@ -9,9 +9,7 @@
         @toggle-status="handleToggleStatus"
         @update-title="handleUpdateTitle"
       />
-      <NotesCard />
     </main>
-    <PageFooter />
   </div>
 </template>
 
@@ -20,8 +18,6 @@ import { ref } from 'vue'
 import HeroHeader from './components/HeroHeader.vue'
 import TodoInput from './components/TodoInput.vue'
 import TodoList from './components/TodoList.vue'
-import NotesCard from './components/NotesCard.vue'
-import PageFooter from './components/PageFooter.vue'
 
 const tasks = ref([
   {

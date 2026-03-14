@@ -18,12 +18,14 @@
       </div>
       <div class="input-field">
         <label class="input-label" for="todo-due">截止</label>
-        <input
-          id="todo-due"
-          v-model="due"
-          class="input-box small"
-          type="datetime-local"
-        />
+        <div class="input-date">
+          <input
+            id="todo-due"
+            v-model="due"
+            class="input-box input-date-box"
+            type="datetime-local"
+          />
+        </div>
       </div>
       <button class="primary-btn" type="submit">添加任务</button>
     </form>
