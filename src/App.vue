@@ -1,9 +1,9 @@
-<template>
+﻿<template>
   <div class="page">
     <HeroHeader />
     <main class="board">
-      <TaskInputCard @add-task="handleAddTask" />
-      <TaskListCard :tasks="tasks" @delete-task="handleDeleteTask" />
+      <TodoInput @add-todo="handleAddTask" />
+      <TodoList :todos="tasks" @delete-todo="handleDeleteTask" />
       <NotesCard />
     </main>
     <PageFooter />
@@ -13,15 +13,15 @@
 <script setup>
 import { ref } from 'vue'
 import HeroHeader from './components/HeroHeader.vue'
-import TaskInputCard from './components/TaskInputCard.vue'
-import TaskListCard from './components/TaskListCard.vue'
+import TodoInput from './components/TodoInput.vue'
+import TodoList from './components/TodoList.vue'
 import NotesCard from './components/NotesCard.vue'
 import PageFooter from './components/PageFooter.vue'
 
 const tasks = ref([
   {
     id: 1,
-    title: '评审线框图',
+    title: '审核线框图',
     meta: '设计 · 09:30',
     status: 'done',
     tag: '完成',
@@ -32,7 +32,7 @@ const tasks = ref([
     title: '制作主视觉动效原型',
     meta: '动效 · 11:00',
     status: 'todo',
-    tag: '高优先',
+    tag: '高优先级',
     tagStyle: 'focus',
   },
   {
@@ -40,7 +40,7 @@ const tasks = ref([
     title: '撰写空状态文案',
     meta: '内容 · 14:00',
     status: 'todo',
-    tag: '中优先',
+    tag: '中优先级',
     tagStyle: 'neutral',
   },
   {
@@ -56,7 +56,7 @@ const tasks = ref([
     title: '打磨设置图标',
     meta: '界面 · 16:30',
     status: 'todo',
-    tag: '低优先',
+    tag: '低优先级',
     tagStyle: 'neutral',
   },
 ])

@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <footer class="footer">
     <div class="footer-left">
       <span class="footer-label">状态</span>

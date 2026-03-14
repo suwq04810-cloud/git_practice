@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <section class="panel notes">
     <div class="panel-header">
       <h2 class="panel-title">备注</h2>
@@ -12,7 +12,7 @@
       </p>
     </div>
     <div class="note-card">
-      <p class="note-title">快速收益</p>
+      <p class="note-title">快速收尾</p>
       <p class="note-body">
         确认任务标签、定稿字体搭配，并让间距对齐看板网格。
       </p>
