@@ -299,6 +299,7 @@ body {
   border-radius: var(--radius-m);
   background: var(--color-surface-alt);
   border: 1px solid transparent;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .task-item.done {
@@ -330,27 +331,73 @@ body {
 }
 
 .check {
-  width: 18px;
-  height: 18px;
-  border-radius: 6px;
-  background: var(--color-primary);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(31, 35, 40, 0.3);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  position: relative;
 }
 
-.check.empty {
-  background: transparent;
-  border: 2px solid rgba(31, 35, 40, 0.4);
+.check::after {
+  content: '';
+  width: 8px;
+  height: 12px;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  transform: rotate(45deg) scale(0);
+  transition: transform 0.2s ease;
+}
+
+.check.checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: scale(1.05);
+}
+
+.check.checked::after {
+  transform: rotate(45deg) scale(1);
 }
 
 .task-title {
   margin: 0;
   font-size: var(--text-base);
   font-weight: 600;
+  position: relative;
+  transition: color 0.2s ease;
 }
 
 .task-meta {
   margin: 4px 0 0;
   font-size: var(--text-xs);
   color: var(--color-muted);
+}
+
+.task-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 55%;
+  height: 2px;
+  background: rgba(31, 35, 40, 0.4);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  border-radius: 999px;
+}
+
+.task-item.done .task-title {
+  color: rgba(31, 35, 40, 0.45);
+}
+
+.task-item.done .task-title::after {
+  transform: scaleX(1);
 }
 
 .tag {
@@ -388,6 +435,16 @@ body {
   border-radius: 10px;
   font-size: var(--text-xs);
   cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.task-item:hover .icon-btn {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .confirm-pop {
@@ -439,6 +496,17 @@ body {
   background: var(--color-danger);
   border-color: var(--color-danger);
   color: #ffffff;
+}
+
+.edit-input {
+  width: 100%;
+  border: 1px solid rgba(47, 98, 255, 0.4);
+  border-radius: var(--radius-m);
+  padding: 6px 10px;
+  font-size: var(--text-base);
+  font-family: var(--font-body);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(47, 98, 255, 0.15);
 }
 
 .empty-state {

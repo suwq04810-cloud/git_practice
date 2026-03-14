@@ -1,9 +1,32 @@
 ﻿<template>
   <li class="task-item" :class="todo.status">
     <div class="task-left">
-      <span class="check" :class="{ empty: todo.status !== 'done' }"></span>
+      <button
+        class="check"
+        :class="{ checked: todo.status === 'done' }"
+        type="button"
+        aria-label="切换任务状态"
+        @click="toggleStatus"
+      ></button>
       <div>
-        <p class="task-title" :title="todo.title">{{ todo.title }}</p>
+        <p
+          v-if="!isEditing"
+          class="task-title"
+          :title="todo.title"
+          @dblclick="startEditing"
+        >
+          {{ todo.title }}
+        </p>
+        <input
+          v-else
+          ref="editInput"
+          v-model="draftTitle"
+          class="edit-input"
+          type="text"
+          @keydown.enter="saveEdit"
+          @keydown.esc="cancelEdit"
+          @blur="saveEdit"
+        />
         <p class="task-meta" :title="todo.meta">{{ todo.meta }}</p>
       </div>
     </div>
@@ -30,9 +53,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 
-const emit = defineEmits(['delete-todo'])
+const emit = defineEmits(['delete-todo', 'toggle-status', 'update-title'])
 const props = defineProps({
   todo: {
     type: Object,
@@ -41,6 +64,9 @@ const props = defineProps({
 })
 
 const pendingDelete = ref(false)
+const isEditing = ref(false)
+const draftTitle = ref(props.todo.title)
+const editInput = ref(null)
 
 const toggleConfirm = () => {
   pendingDelete.value = !pendingDelete.value
@@ -53,5 +79,33 @@ const confirmDelete = () => {
 
 const cancelDelete = () => {
   pendingDelete.value = false
+}
+
+const toggleStatus = () => {
+  emit('toggle-status', props.todo.id)
+}
+
+const startEditing = async () => {
+  isEditing.value = true
+  draftTitle.value = props.todo.title
+  await nextTick()
+  editInput.value?.focus()
+  editInput.value?.select()
+}
+
+const saveEdit = () => {
+  if (!isEditing.value) return
+  const trimmed = draftTitle.value.trim()
+  if (trimmed) {
+    emit('update-title', { id: props.todo.id, title: trimmed })
+  } else {
+    draftTitle.value = props.todo.title
+  }
+  isEditing.value = false
+}
+
+const cancelEdit = () => {
+  draftTitle.value = props.todo.title
+  isEditing.value = false
 }
 </script>

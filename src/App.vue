@@ -3,7 +3,12 @@
     <HeroHeader />
     <main class="board">
       <TodoInput @add-todo="handleAddTask" />
-      <TodoList :todos="tasks" @delete-todo="handleDeleteTask" />
+      <TodoList
+        :todos="tasks"
+        @delete-todo="handleDeleteTask"
+        @toggle-status="handleToggleStatus"
+        @update-title="handleUpdateTitle"
+      />
       <NotesCard />
     </main>
     <PageFooter />
@@ -80,5 +85,21 @@ const handleAddTask = ({ title, due }) => {
 
 const handleDeleteTask = (id) => {
   tasks.value = tasks.value.filter((task) => task.id !== id)
+}
+
+const handleToggleStatus = (id) => {
+  tasks.value = tasks.value.map((task) => {
+    if (task.id !== id) return task
+    const nextStatus = task.status === 'done' ? 'todo' : 'done'
+    return { ...task, status: nextStatus }
+  })
+}
+
+const handleUpdateTitle = ({ id, title }) => {
+  const trimmedTitle = title.trim()
+  if (!trimmedTitle) return
+  tasks.value = tasks.value.map((task) =>
+    task.id === id ? { ...task, title: trimmedTitle } : task,
+  )
 }
 </script>

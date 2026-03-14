@@ -22,7 +22,7 @@
           id="todo-due"
           v-model="due"
           class="input-box small"
-          type="date"
+          type="datetime-local"
         />
       </div>
       <button class="primary-btn" type="submit">添加任务</button>
@@ -52,7 +52,10 @@ const submitTodo = () => {
 
 const formatDate = (value) => {
   if (!value) return ''
-  const [year, month, day] = value.split('-')
-  return `${Number(month)} 月 ${Number(day)} 日`
+  const [datePart, timePart] = value.split('T')
+  if (!datePart) return ''
+  const [, month, day] = datePart.split('-')
+  const timeText = timePart ? ` ${timePart}` : ''
+  return `${Number(month)} 月 ${Number(day)} 日${timeText}`
 }
 </script>

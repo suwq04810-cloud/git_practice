@@ -11,6 +11,8 @@
         :key="todo.id"
         :todo="todo"
         @delete-todo="handleDelete"
+        @toggle-status="handleToggleStatus"
+        @update-title="handleUpdateTitle"
       />
     </ul>
 
@@ -28,7 +30,7 @@ import { computed } from 'vue'
 import TodoFooter from './TodoFooter.vue'
 import TodoItem from './TodoItem.vue'
 
-const emit = defineEmits(['delete-todo'])
+const emit = defineEmits(['delete-todo', 'toggle-status', 'update-title'])
 const props = defineProps({
   todos: {
     type: Array,
@@ -38,6 +40,14 @@ const props = defineProps({
 
 const handleDelete = (id) => {
   emit('delete-todo', id)
+}
+
+const handleToggleStatus = (id) => {
+  emit('toggle-status', id)
+}
+
+const handleUpdateTitle = (payload) => {
+  emit('update-title', payload)
 }
 
 const doneCount = computed(
