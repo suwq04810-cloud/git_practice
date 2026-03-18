@@ -77,12 +77,6 @@
       </p>
     </div>
 
-    <div class="filters">
-      <span class="filter active">全部</span>
-      <span class="filter">进行中</span>
-      <span class="filter">已完成</span>
-      <span class="filter">受阻</span>
-    </div>
   </section>
 </template>
 
