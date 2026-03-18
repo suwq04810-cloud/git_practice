@@ -477,6 +477,43 @@ body {
   box-shadow: 0 12px 24px -18px rgba(47, 98, 255, 0.6);
 }
 
+.shortcut-hint {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.shortcut-guide {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.shortcut-state {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-muted);
+}
+
+.shortcut-state.tone-success {
+  color: var(--color-success);
+}
+
+.shortcut-state.tone-warn {
+  color: #9a6700;
+}
+
+.shortcut-priority {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  background: rgba(47, 98, 255, 0.12);
+  color: var(--color-primary-strong);
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
