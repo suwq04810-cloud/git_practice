@@ -25,6 +25,9 @@
             class="input-box input-date-box"
             type="datetime-local"
           />
+          <span class="input-date-display" :class="{ placeholder: !due }">
+            {{ due ? formatDueDisplay(due) : '请选择截止时间' }}
+          </span>
         </div>
       </div>
       <div class="input-field">
@@ -115,5 +118,17 @@ const submitTodo = () => {
   emit('add-todo', { title: title.value, dueRaw: due.value, tag: tag.value })
   title.value = ''
   due.value = ''
+}
+
+const formatDueDisplay = (value) => {
+  const [datePart, timePart] = value.split('T')
+  if (!datePart) return '请选择截止时间'
+  const [year, month, day] = datePart.split('-')
+  const safeYear = Number(year)
+  const safeMonth = Number(month)
+  const safeDay = Number(day)
+  if (!safeYear || !safeMonth || !safeDay) return '请选择截止时间'
+  const timeText = timePart ? ` ${timePart.slice(0, 5)}` : ''
+  return `${safeYear}-${String(safeMonth).padStart(2, '0')}-${String(safeDay).padStart(2, '0')}${timeText}`
 }
 </script>

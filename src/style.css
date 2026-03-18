@@ -194,7 +194,7 @@ body {
 
 .task-input {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr) minmax(0, 0.7fr) minmax(0, 0.6fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.2fr) minmax(0, 0.75fr) minmax(0, 0.55fr);
   gap: var(--space-3);
   align-items: end;
 }
@@ -393,20 +393,37 @@ body {
   width: 100%;
   min-height: 48px;
   padding-right: 42px;
+  padding-left: 14px;
   text-align: left;
   cursor: pointer;
-  font-size: var(--text-sm);
+  font-size: 0;
+  line-height: 0;
   font-variant-numeric: tabular-nums;
+  color: transparent;
+  caret-color: transparent;
   appearance: none;
   -webkit-appearance: none;
 }
 
 .input-date-box::-webkit-date-and-time-value {
   text-align: left;
+  opacity: 0;
 }
 
 .input-date-box::-webkit-datetime-edit {
+  opacity: 0;
   padding-right: 2px;
+}
+
+.input-date-box::-webkit-datetime-edit-fields-wrapper,
+.input-date-box::-webkit-datetime-edit-text,
+.input-date-box::-webkit-datetime-edit-month-field,
+.input-date-box::-webkit-datetime-edit-day-field,
+.input-date-box::-webkit-datetime-edit-year-field,
+.input-date-box::-webkit-datetime-edit-hour-field,
+.input-date-box::-webkit-datetime-edit-minute-field,
+.input-date-box::-webkit-datetime-edit-ampm-field {
+  color: transparent;
 }
 
 .input-date-box::-webkit-calendar-picker-indicator {
@@ -423,6 +440,25 @@ body {
 .input-date-box::-webkit-inner-spin-button,
 .input-date-box::-webkit-clear-button {
   display: none;
+}
+
+.input-date-display {
+  position: absolute;
+  left: 14px;
+  right: 42px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-sm);
+  color: var(--color-text);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+.input-date-display.placeholder {
+  color: rgba(31, 35, 40, 0.45);
 }
 
 .primary-btn {
