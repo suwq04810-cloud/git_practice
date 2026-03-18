@@ -27,6 +27,36 @@
           />
         </div>
       </div>
+      <div class="input-field">
+        <label class="input-label" for="todo-tag">标签</label>
+        <div ref="tagSelectRef" class="tag-select">
+          <button
+            id="todo-tag"
+            class="input-box tag-trigger"
+            :class="[tagToneClass, { 'is-placeholder': !tag }]"
+            type="button"
+            @click="toggleTagMenu"
+          >
+            <span class="tag-trigger-main">
+              <span v-if="tag" class="tag-trigger-dot" :class="tagToneClass"></span>
+              <span class="tag-trigger-text">{{ tag || '请选择标签' }}</span>
+            </span>
+            <span class="tag-trigger-arrow" :class="{ open: isTagMenuOpen }"></span>
+          </button>
+          <ul v-if="isTagMenuOpen" class="tag-menu">
+            <li v-for="option in tagOptions" :key="option">
+              <button
+                type="button"
+                class="tag-option"
+                :class="[getTagToneClass(option), { active: option === tag }]"
+                @click="selectTag(option)"
+              >
+                {{ option }}
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
       <button class="primary-btn" type="submit">添加任务</button>
     </form>
 
@@ -40,24 +70,50 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const emit = defineEmits(['add-todo'])
 const title = ref('')
 const due = ref('')
-
-const submitTodo = () => {
-  emit('add-todo', { title: title.value, due: formatDate(due.value) })
-  title.value = ''
-  due.value = ''
+const tag = ref('')
+const tagOptions = ['高优先级', '中优先级', '低优先级']
+const isTagMenuOpen = ref(false)
+const tagSelectRef = ref(null)
+const TAG_TONE_CLASS_MAP = {
+  高优先级: 'focus-tone',
+  中优先级: 'medium-tone',
+  低优先级: 'low-tone',
 }
 
-const formatDate = (value) => {
-  if (!value) return ''
-  const [datePart, timePart] = value.split('T')
-  if (!datePart) return ''
-  const [, month, day] = datePart.split('-')
-  const timeText = timePart ? ` ${timePart}` : ''
-  return `${Number(month)} 月 ${Number(day)} 日${timeText}`
+const getTagToneClass = (value) => TAG_TONE_CLASS_MAP[value] || ''
+const tagToneClass = computed(() => getTagToneClass(tag.value))
+
+const toggleTagMenu = () => {
+  isTagMenuOpen.value = !isTagMenuOpen.value
+}
+
+const selectTag = (value) => {
+  tag.value = value
+  isTagMenuOpen.value = false
+}
+
+const closeTagMenuOnOutside = (event) => {
+  if (!tagSelectRef.value?.contains(event.target)) {
+    isTagMenuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('mousedown', closeTagMenuOnOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', closeTagMenuOnOutside)
+})
+
+const submitTodo = () => {
+  emit('add-todo', { title: title.value, dueRaw: due.value, tag: tag.value })
+  title.value = ''
+  due.value = ''
 }
 </script>

@@ -5,9 +5,11 @@
       <TodoInput @add-todo="handleAddTask" />
       <TodoList
         v-model:todos="tasks"
+        :filter-status="statusFilter"
         @delete-todo="handleDeleteTask"
         @toggle-status="handleToggleStatus"
         @update-title="handleUpdateTitle"
+        @update-filter="handleUpdateFilter"
       />
     </main>
   </div>
@@ -64,6 +66,14 @@ const tasks = ref([
 
 const nextId = ref(6)
 const STORAGE_KEY = 'todo-list-items'
+const statusFilter = ref('all')
+const TAG_STYLE_MAP = {
+  高优先级: 'focus',
+  中优先级: 'neutral',
+  低优先级: 'neutral',
+  完成: 'calm',
+  受阻: 'alert',
+}
 
 onMounted(() => {
   try {
@@ -71,7 +81,11 @@ onMounted(() => {
     if (!saved) return
     const parsed = JSON.parse(saved)
     if (Array.isArray(parsed)) {
-      tasks.value = parsed
+      tasks.value = parsed.map((task) => ({
+        ...task,
+        tagStyle: task.tagStyle || TAG_STYLE_MAP[task.tag] || 'neutral',
+        meta: task.meta || buildMeta(task.dueRaw),
+      }))
       const maxId = parsed.reduce((max, item) => Math.max(max, Number(item.id) || 0), 0)
       nextId.value = Math.max(nextId.value, maxId + 1)
     }
@@ -88,18 +102,21 @@ watch(
   { deep: true },
 )
 
-const handleAddTask = ({ title, due }) => {
+const handleAddTask = ({ title, dueRaw, tag }) => {
   const trimmedTitle = title.trim()
   if (!trimmedTitle) return
-  const meta = due ? `待办 · ${due}` : '待办 · 未设置'
+  const meta = buildMeta(dueRaw)
+  const safeTag = tag || '中优先级'
+  const tagStyle = TAG_STYLE_MAP[safeTag] || 'neutral'
 
   tasks.value.unshift({
     id: nextId.value++,
     title: trimmedTitle,
     meta,
+    dueRaw: dueRaw || '',
     status: 'todo',
-    tag: '新任务',
-    tagStyle: 'neutral',
+    tag: safeTag,
+    tagStyle,
   })
 }
 
@@ -121,5 +138,18 @@ const handleUpdateTitle = ({ id, title }) => {
   tasks.value = tasks.value.map((task) =>
     task.id === id ? { ...task, title: trimmedTitle } : task,
   )
+}
+
+const handleUpdateFilter = (value) => {
+  statusFilter.value = value
+}
+
+const buildMeta = (dueRaw) => {
+  if (!dueRaw) return '待办 · 未设置'
+  const [datePart, timePart] = dueRaw.split('T')
+  if (!datePart) return '待办 · 未设置'
+  const [, month, day] = datePart.split('-')
+  const timeText = timePart ? ` ${timePart}` : ''
+  return `待办 · ${Number(month)} 月 ${Number(day)} 日${timeText}`
 }
 </script>
