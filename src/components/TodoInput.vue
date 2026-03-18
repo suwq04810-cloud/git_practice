@@ -5,7 +5,13 @@
       <span class="panel-note">快速记录今天的重点</span>
     </div>
 
-    <form ref="todoFormRef" class="task-input" @submit.prevent="submitTodo">
+    <form
+      ref="todoFormRef"
+      class="task-input"
+      title="支持快捷键：/ 聚焦任务名称，1/2/3 设置优先级，Enter 直接新增"
+      aria-label="任务输入区，可用快捷键 /、1、2、3、Enter"
+      @submit.prevent="submitTodo"
+    >
       <div class="input-field">
         <label class="input-label" for="todo-title">任务名称</label>
         <input
@@ -64,7 +70,7 @@
       </div>
       <button class="primary-btn" type="submit">添加任务</button>
     </form>
-    <div class="shortcut-hint" role="status" aria-live="polite">
+    <div class="shortcut-hint sr-only" role="status" aria-live="polite" aria-atomic="true">
       <p class="shortcut-guide">快捷键：/ 聚焦任务名称，1/2/3 设置优先级，Enter 直接新增</p>
       <p class="shortcut-state" :class="`tone-${shortcutTone}`">
         当前优先级：<span class="shortcut-priority">{{ effectiveTag }}</span> · {{ shortcutStatus }}

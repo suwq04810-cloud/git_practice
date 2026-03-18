@@ -38,7 +38,9 @@
       @keydown="handleMottoKeydown"
     />
 
-    <p class="hero-edit-status" :class="`is-${statusTone}`">{{ statusText }}</p>
+    <p class="hero-edit-status sr-only" :class="`is-${statusTone}`" role="status" aria-live="polite">
+      {{ statusText }}
+    </p>
 
     <div class="hero-meta">
       <span class="meta-chip">个人</span>
